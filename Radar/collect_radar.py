@@ -5,7 +5,7 @@ from google.cloud import storage
 
 def fetch(state):
 
-  response = requests.get(f'http://sirocco.accuweather.com/nx_mosaic_640x480_public/sir/inmsir{state}_.gif', stream=True)
+  response = requests.get('http://sirocco.accuweather.com/nx_mosaic_640x480_public/sir/inmsir' + state + '_.gif', stream=True)
 
   map_gif = b''  # the 'b' prefix lets Python know the string is binary.
 
