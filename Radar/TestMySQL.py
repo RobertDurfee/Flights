@@ -9,7 +9,8 @@ query = '''
 
 cursor.execute(query)
 
-print(cursor)
+result = cursor.fetchall()
+print(result)
 
 cursor.close()
 cxn.close()
