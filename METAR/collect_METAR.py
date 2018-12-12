@@ -36,7 +36,8 @@ def insert_metar(cxn, data):
       `Precipitation1Hr`, 
       `Precipitation3Hr`, 
       `Precipitation6Hr`, 
-      `Precipitation24Hr`
+      `Precipitation24Hr`,
+      `Code`
     ) VALUES (
       %(Type)s, 
       %(Mode)s, 
@@ -65,7 +66,8 @@ def insert_metar(cxn, data):
       %(Precipitation1Hr)s, 
       %(Precipitation3Hr)s, 
       %(Precipitation6Hr)s, 
-      %(Precipitation24Hr)s
+      %(Precipitation24Hr)s,
+      %(Code)s
     )
     '''
 
@@ -277,7 +279,8 @@ if __name__ == '__main__':
     'Precipitation1Hr': parsed_metar.precip_1hr.value('CM') if parsed_metar.precip_1hr else None,
     'Precipitation3Hr': parsed_metar.precip_3hr.value('CM') if parsed_metar.precip_3hr else None,
     'Precipitation6Hr': parsed_metar.precip_6hr.value('CM') if parsed_metar.precip_6hr else None,
-    'Precipitation24Hr': parsed_metar.precip_24hr.value('CM') if parsed_metar.precip_24hr else None
+    'Precipitation24Hr': parsed_metar.precip_24hr.value('CM') if parsed_metar.precip_24hr else None,
+    'Code': parsed_metar.code
   }
 
   metar_id = insert_metar(cxn, metar_data)
