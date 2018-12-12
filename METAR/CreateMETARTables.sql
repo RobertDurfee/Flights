@@ -30,6 +30,7 @@ CREATE TABLE `METAR` (
   `Precipitation3Hr` DECIMAL(5, 2),
   `Precipitation6Hr` DECIMAL(5, 2),
   `Precipitation24Hr` DECIMAL(5, 2),
+  `Code` VARCHAR(500),
   PRIMARY KEY (`METARID`)
 );
 
@@ -90,7 +91,7 @@ CREATE TABLE `WindShearRunway` (
 CREATE TABLE `Remark` (
   `RemarkID` INT NOT NULL AUTO_INCREMENT,
   `METARID` INT NOT NULL,
-  `Remark` VARCHAR(50),
+  `Remark` VARCHAR(200),
   PRIMARY KEY (`RemarkID`),
   FOREIGN KEY (`METARID`) REFERENCES `METAR`(`METARID`)
 );
