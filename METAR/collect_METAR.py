@@ -5,7 +5,7 @@ import mysql.connector
 
 def insert_metar(cxn, data):
 
-  cursor = cxn.cusor()
+  cursor = cxn.cursor()
 
   query = '''
     INSERT INTO `METAR` (
