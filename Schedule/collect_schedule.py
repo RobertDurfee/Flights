@@ -256,6 +256,9 @@ if __name__ == '__main__':
   arrivals = objectpath.Tree(fetch('KORD', 'arrival'))
   completed_arrivals = arrivals.execute("$.*[@.arrival.actualTime or @.status is 'cancelled']")
 
+  new_departures = 0
+  new_arrivals = 0
+
   for completed in (list(completed_departures) + list(completed_arrivals)):
 
     schedule = {
@@ -267,6 +270,11 @@ if __name__ == '__main__':
     }
 
     if not schedule_exists(cxn, schedule):
+
+      if completed.get('type') == 'departure':
+        new_departures += 1
+      elif completed.get('type') == 'arrival':
+        new_arrivals += 1
       
       airline_id = get_airline_id(cxn, completed.get('airline', {}).get('icaoCode'))
 
@@ -333,3 +341,6 @@ if __name__ == '__main__':
       }
 
       insert_arrival(cxn, arrival)
+
+  print(' D:' + str(new_departures) + '/' + str(len(completed_departures)) + '/' + str(len(departures)), end='')
+  print(' A:' + str(new_arrivals) + '/' + str(len(completed_arrivals)) + '/' + str(len(arrivals)), end='')
