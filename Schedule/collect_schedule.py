@@ -8,7 +8,7 @@ import objectpath
 def get_key():
 
   key_file = open(os.environ['AVIATION_EDGE_API_KEY'], 'r')
-  key = key_file.read()
+  key = key_file.read().split('\n')[0]
   key_file.close()
 
   return key
@@ -233,7 +233,7 @@ def insert_flight(cxn, flight):
   query = '''
     INSERT INTO `Flight` (
       `Number`,
-      `ICAONumber,
+      `ICAONumber`,
       `IATANumber`
     ) VALUES (
       %(number)s,
