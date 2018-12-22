@@ -257,7 +257,7 @@ if __name__ == '__main__':
 
   schedules = fetch('KORD')
   schedules_tree = objectpath.Tree(schedules)
-  completed_schedules = schedules_tree.execute("$.*[@.status is 'landed' or @.status is 'cancelled'")
+  completed_schedules = schedules_tree.execute("$.*[@.status is 'landed' or @.status is 'cancelled']")
 
   for completed in completed_schedules:
 
