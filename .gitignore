@@ -1,3 +1,6 @@
 flights-service-account-key.json
+aviation-edge-api-key
+flight-xml-api-key
 __pycache__
 *.log
+.vscode
