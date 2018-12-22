@@ -252,16 +252,16 @@ if __name__ == '__main__':
 
   departures = fetch('KORD', 'departure')
   departures_tree = objectpath.Tree(departures)
-  completed_departures = departures_tree.execute("$.*[@.arrival.actualTime or @.status is 'cancelled']")
+  completed_departures = list(departures_tree.execute("$.*[@.arrival.actualTime or @.status is 'cancelled']"))
 
   arrivals = fetch('KORD', 'arrival')
   arrivals_tree = objectpath.Tree(arrivals)
-  completed_arrivals = arrivals_tree.execute("$.*[@.arrival.actualTime or @.status is 'cancelled']")
+  completed_arrivals = list(arrivals_tree.execute("$.*[@.arrival.actualTime or @.status is 'cancelled']"))
 
   new_departures = 0
   new_arrivals = 0
 
-  for completed in (list(completed_departures) + list(completed_arrivals)):
+  for completed in (completed_departures + completed_arrivals):
 
     schedule = {
       'departure_icao': completed.get('departure', {}).get('icaoCode'),
@@ -344,5 +344,5 @@ if __name__ == '__main__':
 
       insert_arrival(cxn, arrival)
 
-  print(' D:' + str(new_departures) + '/' + str(len(list(completed_departures))) + '/' + str(len(list(departures))), end='')
-  print(' A:' + str(new_arrivals) + '/' + str(len(list(completed_arrivals))) + '/' + str(len(list(arrivals))), end='')
+  print(' D:' + str(new_departures) + '/' + str(len(completed_departures)) + '/' + str(len(departures)), end='')
+  print(' A:' + str(new_arrivals) + '/' + str(len(completed_arrivals)) + '/' + str(len(arrivals)), end='')
