@@ -169,7 +169,7 @@ def insert_arrival(cxn, arrival):
       `IATACode`,
       `Terminal`,
       `Gate`,
-      `Baggage`
+      `Baggage`,
       `Delay`,
       `ScheduledTime`,
       `EstimatedTime`,
