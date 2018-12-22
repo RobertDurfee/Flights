@@ -2,6 +2,26 @@ CREATE DATABASE `Schedule`;
 
 USE `Schedule`;
 
+CREATE TABLE `Airline` (
+  `AirlineID` INT NOT NULL AUTO_INCREMENT,
+  `Name` VARCHAR(100),
+  `ICAOCode` VARCHAR(5),
+  `IATACode` VARCHAR(5),
+  PRIMARY KEY (`AirlineID`)
+);
+
+CREATE UNIQUE INDEX `UX_Airline_ICAOCode` ON `Airline`(`ICAOCode`);
+
+CREATE TABLE `Flight` (
+  `FlightID` INT NOT NULL AUTO_INCREMENT,
+  `Number` VARCHAR(10),
+  `ICAONumber` VARCHAR(15),
+  `IATANumber` VARCHAR(15),
+  PRIMARY KEY (`FlightID`)
+);
+
+CREATE UNIQUE INDEX `UX_Flight_ICAONumber` ON `Flight`(`ICAONumber`);
+
 CREATE TABLE `Schedule` (
   `ScheduleID` INT NOT NULL AUTO_INCREMENT,
   `Type` VARCHAR(9),
@@ -53,23 +73,3 @@ CREATE TABLE `Arrival` (
 CREATE INDEX `IX_Arrival_ICAOCode_ScheduledTime` ON `Arrival`(`ICAOCode`, `ScheduledTime`);
 CREATE INDEX `IX_Arrival_ICAOCode_ActualTime` ON `Arrival`(`ICAOCode`, `ActualTime`);
 CREATE INDEX `IX_Arrival_ICAOCode_ActualRunway` ON `Arrival`(`ICAOCode`, `ActualRunway`);
-
-CREATE TABLE `Airline` (
-  `AirlineID` INT NOT NULL AUTO_INCREMENT,
-  `Name` VARCHAR(100),
-  `ICAOCode` VARCHAR(5),
-  `IATACode` VARCHAR(5),
-  PRIMARY KEY (`AirlineID`)
-);
-
-CREATE UNIQUE INDEX `UX_Airline_ICAOCode` ON `Airline`(`ICAOCode`);
-
-CREATE TABLE `Flight` (
-  `FlightID` INT NOT NULL AUTO_INCREMENT,
-  `Number` VARCHAR(10),
-  `ICAONumber` VARCHAR(15),
-  `IATANumber` VARCHAR(15),
-  PRIMARY KEY (`FlightID`)
-);
-
-CREATE UNIQUE INDEX `UX_Flight_ICAONumber` ON `Flight`(`ICAONumber`);
