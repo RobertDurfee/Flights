@@ -285,7 +285,7 @@ if __name__ == '__main__':
 
   metar_id = insert_metar(cxn, metar_data)
 
-  for (name, low, high) in parsed_metar.runway:
+  for (name, low, high, _) in parsed_metar.runway:
 
     runway_visibility_data = {
       'METARID': metar_id,
