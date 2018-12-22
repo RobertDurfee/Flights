@@ -342,5 +342,5 @@ if __name__ == '__main__':
 
       insert_arrival(cxn, arrival)
 
-  print(' D:' + str(new_departures) + '/' + str(len(completed_departures)) + '/' + str(len(departures)), end='')
-  print(' A:' + str(new_arrivals) + '/' + str(len(completed_arrivals)) + '/' + str(len(arrivals)), end='')
+  print(' D:' + str(new_departures) + '/' + str(len(list(completed_departures))) + '/' + str(len(list(departures))), end='')
+  print(' A:' + str(new_arrivals) + '/' + str(len(list(completed_arrivals))) + '/' + str(len(list(arrivals))), end='')
