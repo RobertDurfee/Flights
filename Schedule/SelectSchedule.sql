@@ -6,7 +6,7 @@ SELECT `Flight`.`ICAONumber` AS `FlightNumber`,
        `Arrival`.`ICAOCode` AS `Arrival`,
        `Departure`.`ScheduledTime` AS `ScheduledDeparture`,
        `Arrival`.`ScheduledTime` AS `ScheduledArrival`,
-       `Departure`.`AcutalTime` AS `ActualDeparture`,
+       `Departure`.`ActualTime` AS `ActualDeparture`,
        `Arrival`.`ActualTime` AS `ActualArrival`
 FROM `Schedule`
 INNER JOIN `Flight`
