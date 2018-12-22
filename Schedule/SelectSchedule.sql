@@ -15,3 +15,4 @@ INNER JOIN `Departure`
   ON `Schedule`.`ScheduleID` = `Departure`.`ScheduleID`
 INNER JOIN `Arrival`
   ON `Schedule`.`ScheduleID` = `Arrival`.`ScheduleID`
+ORDER BY `Departure`.`ScheduledTime` ASC
