@@ -256,7 +256,7 @@ if __name__ == '__main__':
   arrivals = objectpath.Tree(fetch('KORD', 'arrival'))
   completed_arrivals = arrivals.execute("$.*[@.arrival.actualTime or @.status is 'cancelled']")
 
-  for completed in (completed_departures + completed_arrivals):
+  for completed in (list(completed_departures) + list(completed_arrivals)):
 
     schedule = {
       'departure_icao': completed.get('departure', {}).get('icaoCode'),
