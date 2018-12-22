@@ -250,11 +250,13 @@ if __name__ == '__main__':
 
   cxn = mysql.connector.connect(host='146.148.73.209', user='root', db='Schedule')
 
-  departures = objectpath.Tree(fetch('KORD', 'departure'))
-  completed_departures = departures.execute("$.*[@.arrival.actualTime or @.status is 'cancelled']")
+  departures = fetch('KORD', 'departure')
+  departures_tree = objectpath.Tree(departures)
+  completed_departures = departures_tree.execute("$.*[@.arrival.actualTime or @.status is 'cancelled']")
 
-  arrivals = objectpath.Tree(fetch('KORD', 'arrival'))
-  completed_arrivals = arrivals.execute("$.*[@.arrival.actualTime or @.status is 'cancelled']")
+  arrivals = fetch('KORD', 'arrival')
+  arrivals_tree = objectpath.Tree(arrivals)
+  completed_arrivals = arrivals_tree.execute("$.*[@.arrival.actualTime or @.status is 'cancelled']")
 
   new_departures = 0
   new_arrivals = 0
