@@ -14,14 +14,9 @@ def get_key():
   return key
 
 
-def fetch(icao_code, type=None):
+def fetch(icao_code, type):
 
-  url = 'https://aviation-edge.com/v2/public/timetable?key=' + get_key() + '&icaoCode=' + icao_code
-
-  if type:
-    url += '&type=' + type
-
-  response = requests.get(url)
+  response = requests.get('https://aviation-edge.com/v2/public/timetable?key=' + get_key() + '&icaoCode=' + icao_code + '&type=' + type)
 
   return json.loads(response.text)
 
@@ -255,11 +250,13 @@ if __name__ == '__main__':
 
   cxn = mysql.connector.connect(host='146.148.73.209', user='root', db='Schedule')
 
-  schedules = fetch('KORD')
-  schedules_tree = objectpath.Tree(schedules)
-  completed_schedules = schedules_tree.execute("$.*[@.status is 'landed' or @.status is 'cancelled']")
+  departures = objectpath.Tree(fetch('KORD', 'departure'))
+  completed_departures = departures.execute("$.*[@.arrival.actualTime or @.status is 'cancelled'")
 
-  for completed in completed_schedules:
+  arrivals = objectpath.Tree(fetch('KORD', 'arrival'))
+  completed_arrivals = arrivals.execute("$.*[@.arrival.actualTime or @.status is 'cancelled'")
+
+  for completed in (completed_departures + completed_arrivals):
 
     schedule = {
       'departure_icao': completed.get('departure', {}).get('icaoCode'),
