@@ -4,6 +4,7 @@ import os
 import json
 import objectpath
 
+
 def get_key():
 
   key_file = open(os.environ['AVIATION_EDGE_API_KEY'], 'r')
@@ -252,7 +253,7 @@ def insert_flight(cxn, flight):
 
 if __name__ == '__main__':
 
-  cxn = mysql.connector.connect(host='146.148.73.209', user='root', db='FlightsDatabase')
+  cxn = mysql.connector.connect(host='146.148.73.209', user='root', db='Schedule')
 
   schedules = fetch('KORD')
   schedules_tree = objectpath.Tree(schedules)
