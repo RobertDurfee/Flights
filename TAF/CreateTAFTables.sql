@@ -15,9 +15,9 @@ CREATE TABLE `TAF` (
   PRIMARY KEY (`TAFID`)
 );
 
-CREATE UNIQUE INDEX `UX_TAF_ICAOCode_OriginDateTime` ON `TAF`(`ICAOCode`, `OriginDateTime`)
-CREATE INDEX `IX_TAF_ICAOCode_ValidFromDateTime_ValidTillDateTime` ON `TAF`(`ICAOCode`, `ValidFromDateTime`, `ValidTillDateTime`)
-CREATE INDEX `IX_TAF_ICAOCode_ValidTillDateTime` ON `TAF`(`ICAOCode`, `ValidTillDateTime`)
+CREATE UNIQUE INDEX `UX_TAF_ICAOCode_OriginDateTime` ON `TAF`(`ICAOCode`, `OriginDateTime`);
+CREATE INDEX `IX_TAF_ICAOCode_ValidFromDateTime_ValidTillDateTime` ON `TAF`(`ICAOCode`, `ValidFromDateTime`, `ValidTillDateTime`);
+CREATE INDEX `IX_TAF_ICAOCode_ValidTillDateTime` ON `TAF`(`ICAOCode`, `ValidTillDateTime`);
 
 /* TAF -||---O<- Group */
 /* Group -||---O|- GroupHeader */
@@ -44,10 +44,10 @@ CREATE TABLE `GroupHeader` (
   `TillDateTime` DATETIME(0),
   PRIMARY KEY (`GroupID`),
   FOREIGN KEY (`GroupID`) REFERENCES `Group`(`GroupID`)
-)
+);
 
-CREATE INDEX `IX_GroupHeader_FromDateTime_TillDateTime` ON `GroupHeader`(`FromDateTime`, `TillDateTime`)
-CREATE INDEX `IX_GroupHeader_TillDateTime` ON `GroupHeader`(`TillDateTime`)
+CREATE INDEX `IX_GroupHeader_FromDateTime_TillDateTime` ON `GroupHeader`(`FromDateTime`, `TillDateTime`);
+CREATE INDEX `IX_GroupHeader_TillDateTime` ON `GroupHeader`(`TillDateTime`);
 
 /* Group -||---O|- Wind */
 CREATE TABLE `Wind` (
@@ -58,7 +58,7 @@ CREATE TABLE `Wind` (
   `Unit` VARCHAR(4),
   PRIMARY KEY (`GroupID`),
   FOREIGN KEY (`GroupID`) REFERENCES `Group`(`GroupID`)
-)
+);
 
 /* Group -||---O|- Visibility */
 CREATE TABLE `Visibility` (
@@ -68,7 +68,7 @@ CREATE TABLE `Visibility` (
   `Unit` VARCHAR(3),
   PRIMARY KEY (`GroupID`),
   FOREIGN KEY (`GroupID`) REFERENCES `Group`(`GroupID`)
-)
+);
 
 /* Group -||---O<- Cloud */
 CREATE TABLE `Cloud` (
@@ -79,7 +79,7 @@ CREATE TABLE `Cloud` (
   `Type` VARCHAR(4),
   PRIMARY KEY (`CloudID`),
   FOREIGN KEY (`GroupID`) REFERENCES `Group`(`GroupID`)
-)
+);
 
 /* Group -||---O|- VerticalVisibility */
 CREATE TABLE `VerticalVisibility` (
@@ -87,7 +87,7 @@ CREATE TABLE `VerticalVisibility` (
   `VerticalVisibility` INT,
   PRIMARY KEY (`GroupID`),
   FOREIGN KEY (`GroupID`) REFERENCES `Group`(`GroupID`)
-)
+);
 
 /* Group -||---O<- Weather */
 /* Weather ->|---O<- Intensity */
@@ -98,14 +98,14 @@ CREATE TABLE `Weather` (
   `GroupID` INT NOT NULL,
   PRIMARY KEY (`WeatherID`),
   FOREIGN KEY (`GroupID`) REFERENCES `Group`(`GroupID`)
-)
+);
 
 /* Weather ->|---O<- Intensity */
 CREATE TABLE `Intensity` (
   `IntensityID` INT NOT NULL AUTO_INCREMENT,
   `Intensity` VARCHAR(3),
   PRIMARY KEY (`IntensityID`)
-)
+);
 
 /* ->>---<<- */
 CREATE TABLE `WeatherIntensity` (
@@ -113,14 +113,14 @@ CREATE TABLE `WeatherIntensity` (
   `IntensityID` INT NOT NULL,
   FOREIGN KEY (`WeatherID`) REFERENCES `Weather`(`WeatherID`),
   FOREIGN KEY (`IntensityID`) REFERENCES `Intensity`(`IntensityID`)
-)
+);
 
 /* Weather ->|---O<- Modifier */
 CREATE TABLE `Modifier` (
   `ModifierID` INT NOT NULL AUTO_INCREMENT,
   `Modifier` VARCHAR(3),
   PRIMARY KEY (`ModifierID`)
-)
+);
 
 /* ->>---<<- */
 CREATE TABLE `WeatherModifier` (
@@ -128,14 +128,14 @@ CREATE TABLE `WeatherModifier` (
   `ModifierID` INT NOT NULL,
   FOREIGN KEY (`WeatherID`) REFERENCES `Weather`(`WeatherID`),
   FOREIGN KEY (`ModifierID`) REFERENCES `Modifier`(`ModifierID`)
-)
+);
 
 /* Weather ->|---O<- Phenomenon */
 CREATE TABLE `Phenomenon` (
   `PhenomenonID` INT NOT NULL AUTO_INCREMENT,
   `Phenomenon` VARCHAR(3),
   PRIMARY KEY (`PhenomenonID`)
-)
+);
 
 /* ->>---<<- */
 CREATE TABLE `WeatherPhenomenon` (
@@ -143,7 +143,7 @@ CREATE TABLE `WeatherPhenomenon` (
   `PhenomenonID` INT NOT NULL,
   FOREIGN KEY (`WeatherID`) REFERENCES `Weather`(`WeatherID`),
   FOREIGN KEY (`PhenomenonID`) REFERENCES `Phenomenon`(`PhenomenonID`)
-)
+);
 
 /* Group -||---O|- WindShear */
 CREATE TABLE `WindShear` (
@@ -154,4 +154,4 @@ CREATE TABLE `WindShear` (
   `Unit` VARCHAR(4),
   PRIMARY KEY (`GroupID`),
   FOREIGN KEY (`GroupID`) REFERENCES `Group`(`GroupID`)
-)
+);
