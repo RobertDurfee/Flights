@@ -466,10 +466,10 @@ def construct_date_time(date, hours, minutes=None):
   now = datetime.now()
 
   # If date occurred in previous month
-  if date - now.date >= 27:
+  if date - now.day >= 27:
     month = now.month - 1
   # If date occured in next month
-  elif date - now.date <= -27:
+  elif date - now.day <= -27:
     month = now.month + 1
   # If date occured in same month
   else:
