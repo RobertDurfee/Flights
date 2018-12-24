@@ -21,7 +21,7 @@ SELECT `TAF`.`ICAOCode` AS `ICAO`,
        `WindShear`.`Speed` AS `WindShearSpeed`
 FROM `TAF`
 LEFT JOIN `Group`
-  ON `TAF`.`TAFID` = `Group`.`GroupID`
+  ON `TAF`.`TAFID` = `Group`.`TAFID`
 LEFT JOIN `GroupHeader`
   ON `Group`.`GroupID` = `GroupHeader`.`GroupID`
 LEFT JOIN `Wind`
