@@ -1,4 +1,4 @@
-USE `FlightsDatabase`;
+USE `METAR`;
 
 SELECT *
 FROM `METAR` as mt

@@ -244,7 +244,7 @@ def insert_remark(cxn, data):
 
 if __name__ == '__main__':
 
-  cxn = mysql.connector.connect(host='146.148.73.209', user='root', db='FlightsDatabase')
+  cxn = mysql.connector.connect(host='146.148.73.209', user='root', db='METAR')
 
   response = requests.get('http://tgftp.nws.noaa.gov/data/observations/metar/stations/KORD.TXT')
   raw_metar = response.text.split('\n')[1]
