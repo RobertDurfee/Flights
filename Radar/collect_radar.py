@@ -41,7 +41,7 @@ def insert(cxn, data):
 
 if __name__ == '__main__':
 
-  cxn = mysql.connector.connect(host='146.148.73.209', user='root', db='FlightsDatabase')
+  cxn = mysql.connector.connect(host='146.148.73.209', user='root', db='Radar')
 
   states = { 'il': 'Illinois', 'wi': 'Wisconsin', 'mn': 'Minnesota', 'ia': 'Iowa', 'mo': 'Missouri', 'ky': 'Kentucky', 'in': 'Indiana', 'mi': 'Michigan' }
 

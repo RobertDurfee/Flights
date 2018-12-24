@@ -1,4 +1,6 @@
-USE `FlightsDatabase`;
+CREATE DATABASE `Radar`;
+
+USE `Radar`;
 
 CREATE TABLE `Radar` (
   `RadarID` int NOT NULL AUTO_INCREMENT,
