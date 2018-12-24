@@ -7,7 +7,7 @@ SELECT `TAF`.`ICAOCode` AS `ICAO`,
        `Wind`.`Direction` AS `WindDirection`,
        `Wind`.`Speed` AS `WindSpeed`,
        `Wind`.`Gust` AS `WindGust`,
-       `Visibility`.`MoreThan` AS `VisibilityMoreThan`,
+       CAST(`Visibility`.`MoreThan` AS UNSIGNED) AS `VisibilityMoreThan`,
        `Visibility`.`Range` AS `VisibilityRange`,
        `Cloud`.`Layer` AS `CloudLayer`,
        `Cloud`.`Ceiling` AS `CloudCeiling`,
@@ -49,4 +49,4 @@ LEFT JOIN `Phenomenon`
 LEFT JOIN `WindShear`
   ON `Group`.`GroupID` = `WindShear`.`GroupID`
 WHERE `TAF`.`ICAOCode` = 'KORD'
-ORDER BY `TAF`.`ValidFromDateTime` ASC
+ORDER BY `TAF`.`ValidFromDateTime` ASC\G
