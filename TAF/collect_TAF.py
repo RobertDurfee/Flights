@@ -319,7 +319,7 @@ def insert_weather_intensity(cxn, weather_intensity):
   query = '''
     INSERT INTO `WeatherIntensity` (
       `WeatherID`,
-      `IntensityID`,
+      `IntensityID`
     ) VALUES (
       %(weather_id)s,
       %(intensity_id)s
