@@ -488,6 +488,23 @@ def construct_date_time(date, hours, minutes=None):
   else:
     year = now.year
 
+  # Sometimes the hours are reported as '24'
+  days_in_month = [ None, 31, 28 + (1 if year % 4 == 0 else 0), 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 ]
+
+  if hours == 24:
+    hours = 0
+    if date != days_in_month[month]:
+      date += 1
+    # If last day in month, advance month, set first
+    else:
+      date = 1
+      if month != 12:
+        month += 1
+      # If December, advance year, set January
+      else:
+        month = 1
+        year += 1
+
   return datetime(year, month, date, hours, minutes)
 
 
