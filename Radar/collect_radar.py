@@ -41,19 +41,36 @@ def insert(cxn, data):
 
 if __name__ == '__main__':
 
-  cxn = mysql.connector.connect(host='146.148.73.209', user='root', db='Radar')
-
-  states = { 'il': 'Illinois', 'wi': 'Wisconsin', 'mn': 'Minnesota', 'ia': 'Iowa', 'mo': 'Missouri', 'ky': 'Kentucky', 'in': 'Indiana', 'mi': 'Michigan' }
+  states = {
+    'al': 'Alabama',      'ar': 'Arkansas',      'az': 'Arizona',     'co': 'Colorado', 
+    'ct': 'Connecticut',  'fl': 'Florida',       'ga': 'Georgia',     'ia': 'Iowa', 
+    'id': 'Idaho',        'il': 'Illinois',      'in': 'Indiana',     'ks': 'Kansas', 
+    'ky': 'Kentucky',     'la': 'Louisiana',     'mi': 'Michigan',    'mn': 'Minnesota',
+    'mo': 'Missouri',     'ms': 'Mississippi',   'mt': 'Montana',     'nd': 'NorthDakota',
+    'ne': 'Nebraska',     'nh': 'NewHampshire',  'nm': 'NewMexico',   'nv': 'Nevada', 
+    'ny': 'NewYork',      'oh': 'Ohio',          'ok': 'Oklahoma',    'or': 'Oregon', 
+    'pa': 'Pennsylvania', 'sc': 'SouthCarolina', 'sd': 'SouthDakota', 'tn': 'Tennessee', 
+    'ut': 'Utah',         'va': 'Virginia',      'wa': 'Washington',  'wi': 'Wisconsin',
+    'wy': 'Wyoming'
+  }
 
   for state in states:
 
-    radar_gif = fetch(state)
+    try:
 
-    now = datetime.now()
-    filename = states[state] + '/' + state.upper() + now.strftime('%Y%m%dT%H%M%S') + '.gif'
-    url = 'gs://flights-radar/' + filename
+      cxn = mysql.connector.connect(host='146.148.73.209', user='root', db='Radar')
 
-    upload(radar_gif, 'image/gif', 'flights-radar', filename)
-    insert(cxn, { 'CreatedDateTime': now, 'State': states[state], 'URL': url })
+      radar_gif = fetch(state)
+
+      now = datetime.now()
+      filename = states[state] + '/' + state.upper() + now.strftime('%Y%m%dT%H%M%S') + '.gif'
+      url = 'gs://flights-radar/' + filename
+
+      upload(radar_gif, 'image/gif', 'flights-radar', filename)
+      insert(cxn, { 'CreatedDateTime': now, 'State': states[state], 'URL': url })
+
+    except:
+      print(state + ' failed.')
   
-  cxn.close()
+    finally:
+      cxn.close()

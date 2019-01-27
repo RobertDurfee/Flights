@@ -510,147 +510,172 @@ def construct_date_time(date, hours, minutes=None):
 
 if __name__ == '__main__':
 
-  cxn = mysql.connector.connect(host='146.148.73.209', user='root', db='TAF')
+  airports = [
+    'KORD', 'KSTL', 'KSFO', 'KCAK', 'KRDU', 'KBDL', 'KLNK', 'KMDT', 'KJFK', 'KSEA', 'KCHO',
+    'KRSW', 'KAUS', 'KGRR', 'KFLL', 'KPSP', 'KATW', 'KCVG', 'KFNT', 'KCMI', 'KBTV', 'KDAY',
+    'KBHM', 'KSMF', 'KGSO', 'KCAE', 'KCLE', 'KAZO', 'KLAS', 'KBNA', 'KTYS', 'KSUX', 'KUNV',
+    'KICT', 'KGRB', 'KLGA', 'KDBQ', 'KAVL', 'KRIC', 'KOKC', 'KPIA', 'KMSP', 'KSAV', 'KPHL',
+    'KABQ', 'KCOS', 'KDFW', 'KBUF', 'KMCO', 'KALB', 'KAVP', 'KCHA', 'KEAU', 'KDCA', 'KALO',
+    'KCLT', 'KBIS', 'KMKE', 'KJAN', 'KMLI', 'KXNA', 'KMSY', 'KTUL', 'KBOI', 'KLAX', 'KIAD',
+    'KIAH', 'KDEN', 'KMBS', 'KRST', 'KJAX', 'KPBI', 'KSNA', 'KFAR', 'KELP', 'KCHS', 'KCWA',
+    'KFWA', 'KSBN', 'KSAT', 'KCMH', 'KIND', 'KCID', 'KBMI', 'KMIA', 'KBWI', 'KPIT', 'KCMX',
+    'KLAN', 'KGSP', 'KLSE', 'KSGF', 'KTOL', 'KOMA', 'KTPA', 'KPWM', 'KTVC', 'KHPN', 'KDLH',
+    'KSAN', 'KSRQ', 'KEWR', 'KROC', 'KPDX', 'KORF', 'KMKG', 'KSPI', 'KMSN', 'KATL', 'KCOU',
+    'KDSM', 'KILM', 'KROA', 'KMEM', 'KHSV', 'KSLC', 'KLEX', 'KSDF', 'KEVV', 'KFSD', 'KDTW',
+    'KBOS', 'KSYR', 'KASE', 'KPHX', 'KMCI', 'KLIT'
+  ]
 
-  raw_taf = fetch('KORD')
-  parsed_taf = pytaf.TAF(raw_taf)
+  for airport in airports:
 
-  taf = {
-    'type': parsed_taf._taf_header.get('type'),
-    'icao_code': parsed_taf._taf_header.get('icao_code'),
-    'origin_date_time': construct_date_time(parsed_taf._taf_header.get('origin_date'), parsed_taf._taf_header.get('origin_hours'), parsed_taf._taf_header.get('origin_minutes')),
-    'valid_from_date_time': construct_date_time(parsed_taf._taf_header.get('valid_from_date'), parsed_taf._taf_header.get('valid_from_hours')),
-    'valid_till_date_time': construct_date_time(parsed_taf._taf_header.get('valid_till_date'), parsed_taf._taf_header.get('valid_till_hours')),
-    'form': parsed_taf._taf_header.get('form'),
-    'code': parsed_taf._raw_taf
-  }
+    try:
 
-  taf_id = insert_taf(cxn, taf)
+      cxn = mysql.connector.connect(host='146.148.73.209', user='root', db='TAF')
 
-  for (parsed_group, raw_group) in zip(parsed_taf._weather_groups, parsed_taf._raw_weather_groups):
+      raw_taf = fetch(airport)
+      parsed_taf = pytaf.TAF(raw_taf)
 
-    group = {
-      'taf_id': taf_id,
-      'code': raw_group
-    }
-
-    group_id = insert_group(cxn, group)
-
-    parsed_group_header = parsed_group.get('header')
-    if parsed_group_header and len(parsed_group_header) > 0:
-
-      group_header = {
-        'group_id': group_id,
-        'type': parsed_group_header.get('type'),
-        'probability': int(parsed_group_header.get('probability')) if parsed_group_header.get('probability') is not None else None,
-        'from_date_time': construct_date_time(parsed_group_header.get('from_date'), parsed_group_header.get('from_hours')),
-        'till_date_time': construct_date_time(parsed_group_header.get('till_date'), parsed_group_header.get('till_hours'))
+      taf = {
+        'type': parsed_taf._taf_header.get('type'),
+        'icao_code': parsed_taf._taf_header.get('icao_code'),
+        'origin_date_time': construct_date_time(parsed_taf._taf_header.get('origin_date'), parsed_taf._taf_header.get('origin_hours'), parsed_taf._taf_header.get('origin_minutes')),
+        'valid_from_date_time': construct_date_time(parsed_taf._taf_header.get('valid_from_date'), parsed_taf._taf_header.get('valid_from_hours')),
+        'valid_till_date_time': construct_date_time(parsed_taf._taf_header.get('valid_till_date'), parsed_taf._taf_header.get('valid_till_hours')),
+        'form': parsed_taf._taf_header.get('form'),
+        'code': parsed_taf._raw_taf
       }
 
-      insert_group_header(cxn, group_header)
-    
-    parsed_wind = parsed_group.get('wind')
-    if parsed_wind and len(parsed_wind) > 0:
+      taf_id = insert_taf(cxn, taf)
 
-      wind = {
-        'group_id': group_id,
-        'direction': parsed_wind.get('direction'),
-        'speed': int(parsed_wind.get('speed')) if parsed_wind.get('speed') is not None else None,
-        'gust': int(parsed_wind.get('gust')) if parsed_wind.get('gust') is not None else None,
-        'unit': parsed_wind.get('unit')
-      }
+      for (parsed_group, raw_group) in zip(parsed_taf._weather_groups, parsed_taf._raw_weather_groups):
 
-      insert_wind(cxn, wind)
-    
-    parsed_visibility = parsed_group.get('visibility')
-    if parsed_visibility and len(parsed_visibility) > 0:
-
-      visibility = {
-        'group_id': group_id,
-        'more_than': parsed_visibility.get('more') == 'P',
-        'range': parsed_visibility.get('range'),
-        'unit': parsed_visibility.get('unit')
-      }
-
-      insert_visibility(cxn, visibility)
-    
-    for parsed_cloud in parsed_group.get('clouds', []):
-
-      cloud = {
-        'group_id': group_id,
-        'layer': parsed_cloud.get('layer'),
-        'ceiling': int(parsed_cloud.get('ceiling')) if parsed_cloud.get('ceiling') is not None else None,
-        'type': parsed_cloud.get('type')
-      }
-
-      insert_cloud(cxn, cloud)
-    
-    parsed_vertical_visibility = parsed_group.get('vertical_visibility')
-    if parsed_vertical_visibility:
-
-      vertical_visibility = {
-        'group_id': group_id,
-        'vertical_visibility': parsed_vertical_visibility
-      }
-
-      insert_vertical_visibility(cxn, vertical_visibility)
-
-    for parsed_weather in parsed_group.get('weather', []):
-
-      weather = {
-        'group_id': group_id
-      }
-
-      weather_id = insert_weather(cxn, weather)
-
-      for parsed_intensity in parsed_weather.get('intensity', []):
-
-        intensity_id = get_intensity_id(cxn, parsed_intensity)
-        if intensity_id is None:
-          intensity_id = insert_intensity(cxn, { 'intensity': parsed_intensity }) 
-        
-        weather_intensity = {
-          'weather_id': weather_id,
-          'intensity_id': intensity_id
+        group = {
+          'taf_id': taf_id,
+          'code': raw_group
         }
 
-        insert_weather_intensity(cxn, weather_intensity)
-      
-      for parsed_modifier in parsed_weather.get('modifier', []):
+        group_id = insert_group(cxn, group)
 
-        modifier_id = get_modifier_id(cxn, parsed_modifier)
-        if modifier_id is None:
-          modifier_id = insert_modifier(cxn, { 'modifier': parsed_modifier })
+        parsed_group_header = parsed_group.get('header')
+        if parsed_group_header and len(parsed_group_header) > 0:
+
+          group_header = {
+            'group_id': group_id,
+            'type': parsed_group_header.get('type'),
+            'probability': int(parsed_group_header.get('probability')) if parsed_group_header.get('probability') is not None else None,
+            'from_date_time': construct_date_time(parsed_group_header.get('from_date'), parsed_group_header.get('from_hours')),
+            'till_date_time': construct_date_time(parsed_group_header.get('till_date'), parsed_group_header.get('till_hours'))
+          }
+
+          insert_group_header(cxn, group_header)
         
-        weather_modifier = {
-          'weather_id': weather_id,
-          'modifier_id': modifier_id
-        }
+        parsed_wind = parsed_group.get('wind')
+        if parsed_wind and len(parsed_wind) > 0:
 
-        insert_weather_modifier(cxn, weather_modifier)
-      
-      for parsed_phenomenon in parsed_weather.get('phenomenon', []):
+          wind = {
+            'group_id': group_id,
+            'direction': parsed_wind.get('direction'),
+            'speed': int(parsed_wind.get('speed')) if parsed_wind.get('speed') is not None else None,
+            'gust': int(parsed_wind.get('gust')) if parsed_wind.get('gust') is not None else None,
+            'unit': parsed_wind.get('unit')
+          }
 
-        phenomenon_id = get_phenomenon_id(cxn, parsed_phenomenon)
-        if phenomenon_id is None:
-          phenomenon_id = insert_phenomenon(cxn, { 'phenomenon': parsed_phenomenon })
+          insert_wind(cxn, wind)
         
-        weather_phenomenon = {
-          'weather_id': weather_id,
-          'phenomenon_id': phenomenon_id
-        }
+        parsed_visibility = parsed_group.get('visibility')
+        if parsed_visibility and len(parsed_visibility) > 0:
 
-        insert_weather_phenomenon(cxn, weather_phenomenon)
-    
-    parsed_wind_shear = parsed_group.get('windshear')
-    if parsed_wind_shear and len(parsed_wind_shear) > 0:
+          visibility = {
+            'group_id': group_id,
+            'more_than': parsed_visibility.get('more') == 'P',
+            'range': parsed_visibility.get('range'),
+            'unit': parsed_visibility.get('unit')
+          }
 
-      wind_shear = {
-        'group_id': group_id,
-        'altitude': int(parsed_wind_shear.get('altitude')) if parsed_wind_shear.get('altitude') is not None else None,
-        'direction': int(parsed_wind_shear.get('direction')) if parsed_wind_shear.get('direction') is not None else None,
-        'speed': int(parsed_wind_shear.get('speed')) if parsed_wind_shear.get('speed') is not None else None,
-        'unit': parsed_wind_shear.get('unit')
-      }
+          insert_visibility(cxn, visibility)
+        
+        for parsed_cloud in parsed_group.get('clouds', []):
 
-      insert_wind_shear(cxn, wind_shear)
+          cloud = {
+            'group_id': group_id,
+            'layer': parsed_cloud.get('layer'),
+            'ceiling': int(parsed_cloud.get('ceiling')) if parsed_cloud.get('ceiling') is not None else None,
+            'type': parsed_cloud.get('type')
+          }
+
+          insert_cloud(cxn, cloud)
+        
+        parsed_vertical_visibility = parsed_group.get('vertical_visibility')
+        if parsed_vertical_visibility:
+
+          vertical_visibility = {
+            'group_id': group_id,
+            'vertical_visibility': parsed_vertical_visibility
+          }
+
+          insert_vertical_visibility(cxn, vertical_visibility)
+
+        for parsed_weather in parsed_group.get('weather', []):
+
+          weather = {
+            'group_id': group_id
+          }
+
+          weather_id = insert_weather(cxn, weather)
+
+          for parsed_intensity in parsed_weather.get('intensity', []):
+
+            intensity_id = get_intensity_id(cxn, parsed_intensity)
+            if intensity_id is None:
+              intensity_id = insert_intensity(cxn, { 'intensity': parsed_intensity }) 
+            
+            weather_intensity = {
+              'weather_id': weather_id,
+              'intensity_id': intensity_id
+            }
+
+            insert_weather_intensity(cxn, weather_intensity)
+          
+          for parsed_modifier in parsed_weather.get('modifier', []):
+
+            modifier_id = get_modifier_id(cxn, parsed_modifier)
+            if modifier_id is None:
+              modifier_id = insert_modifier(cxn, { 'modifier': parsed_modifier })
+            
+            weather_modifier = {
+              'weather_id': weather_id,
+              'modifier_id': modifier_id
+            }
+
+            insert_weather_modifier(cxn, weather_modifier)
+          
+          for parsed_phenomenon in parsed_weather.get('phenomenon', []):
+
+            phenomenon_id = get_phenomenon_id(cxn, parsed_phenomenon)
+            if phenomenon_id is None:
+              phenomenon_id = insert_phenomenon(cxn, { 'phenomenon': parsed_phenomenon })
+            
+            weather_phenomenon = {
+              'weather_id': weather_id,
+              'phenomenon_id': phenomenon_id
+            }
+
+            insert_weather_phenomenon(cxn, weather_phenomenon)
+        
+        parsed_wind_shear = parsed_group.get('windshear')
+        if parsed_wind_shear and len(parsed_wind_shear) > 0:
+
+          wind_shear = {
+            'group_id': group_id,
+            'altitude': int(parsed_wind_shear.get('altitude')) if parsed_wind_shear.get('altitude') is not None else None,
+            'direction': int(parsed_wind_shear.get('direction')) if parsed_wind_shear.get('direction') is not None else None,
+            'speed': int(parsed_wind_shear.get('speed')) if parsed_wind_shear.get('speed') is not None else None,
+            'unit': parsed_wind_shear.get('unit')
+          }
+
+          insert_wind_shear(cxn, wind_shear)
+
+    except:
+      print(airport + ' failed.')
+
+    finally:
+      cxn.close()
