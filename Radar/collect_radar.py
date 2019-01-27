@@ -73,4 +73,4 @@ if __name__ == '__main__':
       print(state + ' failed.')
   
     finally:
-      cxn.close()
+      if 'cxn' in locals() or 'cxn' in globals(): cxn.close()

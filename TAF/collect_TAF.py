@@ -678,4 +678,4 @@ if __name__ == '__main__':
       print(airport + ' failed.')
 
     finally:
-      cxn.close()
+      if 'cxn' in locals() or 'cxn' in globals(): cxn.close()
