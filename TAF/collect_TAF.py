@@ -19,7 +19,7 @@ def fetch(icao_code):
   response = requests.get('https://www.aviationweather.gov/taf/board?ids=' + icao_code + '&date=&submit=Goto+TAF+board')
   soup = BeautifulSoup(response.text, 'html.parser')
 
-  taf_soup = soup.select('#awc_main_content_wrap > code')[0]
+  taf_soup = soup.select('#awc_main_content_wrap > p > code')[0]
   taf_soup = replace_line_breaks(taf_soup)
 
   return taf_soup.get_text()
